@@ -4,96 +4,163 @@ This application uses machine learning techniques to predict house prices across
 
 # 🏠 USA House Price Prediction ML App
 
-## Project Objective  
-This project delivers a production-grade machine learning application to predict house prices in the United States using real-time, geolocated features and economic factors relevant to 2025. It is designed for real estate analysts, home buyers, and tech-savvy investors to get accurate home price predictions based on minimal but highly influential features.
 
-The model incorporates Random Forest and Linear Regression, hyperparameter optimization, location-based API integration, and state-specific tax adjustments. The app is deployed using Streamlit and allows user interactivity through geospatial visualizations and real-time predictions.
+# 🏠 USA House Price Prediction ML App
 
----
+## Project Objective
+This project delivers a professional-grade machine learning application for predicting house prices across the United States. Designed for real estate professionals, analysts, and investors, the solution uses real-world economic data, optimized machine learning models, and geospatial APIs to deliver accurate, interpretable price predictions in 2025 market conditions. 
 
-## 📂 Dataset  
-
-- **Source**: U.S. housing market datasets + custom augmentation  
-- **Volume**: 100,000+ rows  
-- **Final Features Used**:
-  - 🛏 Bedrooms
-  - 🛁 Bathrooms
-  - 📏 Living Area (sq ft)
-  - 🧱 House Condition (1–5 scale)
-  - 🏫 Nearby School Rating
-  - 🌎 ZIP Code (converted to lat/long)
-  - 🧾 State Tax Adjustment for 2025
+The app simplifies prediction to five impactful features while incorporating hyperparameter tuning, economic adjustments, and API-enhanced location intelligence. It is built using Python, scikit-learn, Streamlit, and OpenStreetMap's Nominatim API.
 
 ---
 
-## ❓ Key Questions / KPIs
+## 📊 Dataset Summary
 
-1. What is the predicted house price based on 5 key attributes?
-2. How do 2025 tax policies affect pricing across different states?
-3. What’s the MAE and R² score for each ML model tested?
-4. Do homes near better schools consistently have higher price predictions?
-5. Can minimal features still provide high accuracy in regression modeling?
-6. Which state shows the highest average predicted price in 2025?
-7. Does home condition affect price more than school quality?
-
----
-
-## ⚙️ ML Models Used  
-
-| Model               | MAE     | R² Score | Notes                          |
-|--------------------|---------|----------|-------------------------------|
-| Linear Regression  | $27,300 | 0.71     | Simple, interpretable         |
-| Decision Tree      | $21,500 | 0.82     | Sensitive to outliers         |
-| Random Forest (🏆) | $18,700 | 0.89     | Best after tuning             |
-
-- 🧠 Final model trained with `GridSearchCV`
-- 🧾 Serialized with `joblib` → `model.pkl`
+- **Source**: U.S. residential property listings, augmented with school ratings, ZIP code mapping, and state tax policies.
+- **Size**: Over 100,000 housing records.
+- **Target Variable**: House sale price
+- **Key Engineered Features**:
+  - Bedrooms
+  - Bathrooms
+  - Living Area (sq ft)
+  - House Condition (1–5 scale)
+  - Nearby School Quality Rating
+  - Geolocation (via ZIP code → Lat/Long)
+  - Adjusted for state-specific 2025 tax policies
 
 ---
 
-## 🔧 Process  
+## ❓ Key Business Questions & KPIs
 
-1. **Data Engineering**
-   - Removed outliers, nulls, and inconsistent entries
-   - Augmented data with ZIP→Lat/Long via Nominatim API
-   - Applied 2025 state-level tax adjustment multipliers
-
-2. **Feature Selection**
-   - Selected top 5 features based on correlation and SHAP values
-   - Avoided overfitting through minimal dimensionality
-
-3. **Modeling & Evaluation**
-   - Split data 80/20
-   - Trained models and optimized Random Forest using GridSearchCV
-   - Evaluated using MAE, R² Score, and Residual Analysis
-
-4. **App Development**
-   - Built UI using Streamlit
-   - Integrated interactive map with Folium
-   - Allowed user to input features to generate live predictions
+1. Can minimal, high-impact features predict house prices accurately?
+2. What effect do school ratings and property condition have on valuations?
+3. How do different U.S. states compare in predicted pricing, adjusted for 2025 tax codes?
+4. What is the accuracy tradeoff between model complexity and interpretability?
+5. Are hyperparameter-optimized models significantly more robust in generalization?
 
 ---
 
-## 🗺️ API & Libraries  
+## ⚙️ Model Development & Methodology
 
-- 📍 **Nominatim API (OpenStreetMap)** – convert ZIP to geolocation  
-- 🐍 **Python Libraries**:
-  - `pandas`, `numpy`, `scikit-learn`
-  - `geopy`, `joblib`, `folium`, `streamlit`, `matplotlib`
+### 🧹 Data Processing
+- Null values, duplicates, and inconsistent entries were removed.
+- ZIP codes were geocoded using the Nominatim API to derive latitude/longitude.
+- State-level 2025 housing tax rates were applied as price multipliers for realism.
+- School scores and condition were normalized to 0–1 scales where applicable.
+
+### 🧪 Train/Test Split
+- Stratified sampling ensured representative pricing across regions.
+- Dataset split: 80% for training, 20% for testing.
+- Cross-validation used during tuning to prevent overfitting.
+
+### 🧠 Models Evaluated
+- **Linear Regression** – Baseline for interpretability.
+- **Decision Tree Regressor** – Introduced non-linearity, fast fit.
+- **Random Forest Regressor** – Final choice due to balance of accuracy and robustness.
+
+### 🔍 Hyperparameter Tuning
+Used `GridSearchCV` with 5-fold cross-validation:
+- **Random Forest**
+  - `n_estimators`: [100, 300, 500]
+  - `max_depth`: [10, 20, 30, None]
+  - `min_samples_split`: [2, 5, 10]
+  - `min_samples_leaf`: [1, 2, 4]
+  - `bootstrap`: [True, False]
+- Final model serialized with `joblib` as `model.pkl`
 
 ---
 
-## 🖥 How to Use / Run Locally  
+## 🖥 App Features (Streamlit)
+- Real-time prediction based on user input (5 key features)
+- Location-aware mapping using Folium + Nominatim
+- State-aware pricing with tax-based adjustments
+- Input validation and prediction display UI
 
+---
+
+## 🔧 Technologies Used
+- Python, scikit-learn, pandas, numpy
+- Streamlit (UI framework)
+- Geopy + Nominatim API (geolocation)
+- Joblib (model serialization)
+- Folium (map rendering)
+
+---
+
+## 🗺️ How to Run Locally
 ```bash
-# Step 1: Clone the repo
-git clone https://github.com/<your-username>/usa-house-price-prediction-ml-app.git  
-cd usa-house-price-prediction-ml-app  
+# Clone the repo
+git clone https://github.com/<your-username>/usa-house-price-prediction-ml-app.git
+cd usa-house-price-prediction-ml-app
 
-# Step 2: Install dependencies
+# Install required libraries
 pip install -r requirements.txt
 
-# Step 3: Run the Streamlit app
+# Run the app
 streamlit run streamlit_app.py
+```
+
+---
+
+## 📁 Project Structure
+```
+usa-house-price-prediction-ml-app/
+│
+├── data/                         # Cleaned datasets (optional)
+├── models/
+│   └── model.pkl                 # Final trained model
+├── streamlit_app.py              # Main app logic
+├── requirements.txt              # Dependencies
+├── README.md                     # You're reading this!
+└── assets/
+    └── screenshots/              # App UI visuals
+```
+
+---
+
+## 💡 Project Insights
+- States with higher tax rates (e.g., CA, NY) required adjustments to reflect net cost of ownership.
+- School rating showed a high correlation with price even when controlling for ZIP and size.
+- Random Forest model delivered reliable accuracy without overfitting.
+- The 5 selected features yielded high predictive power, validating the "minimal-input" approach.
+- SHAP analysis (in future phase) will be added to visualize feature importance for interpretability.
+
+---
+
+## 🧩 Future Enhancements
+- Mortgage estimation and loan amortization tools
+- Zillow/Redfin live data integration
+- CSV upload for bulk predictions
+- Authentication & session-based saving for real estate agents
+- Feature attribution with SHAP/ELI5
+
+---
+
+## 🔗 Live Demo
+[Launch the Streamlit App](https://your-streamlit-url)
+
+---
+
+## 🏷️ Tags
+#machinelearning #realestate
+
+---
+
+## 👨‍💻 Developer
+**Ayman Mohammad**  
+B.S. Information Technology and Systems  
+University of Texas at Dallas  
+[GitHub: yourGitHubUsername](https://github.com/yourGitHubUsername)
+
+---
+
+## ⭐ Support
+If this project was helpful, please give it a ⭐ on GitHub. Fork it, build on it, and share feedback!
+
+---
+
+© 2025 Ayman Mohammad | MIT License
+
+
 
 
