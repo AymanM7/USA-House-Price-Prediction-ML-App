@@ -1,7 +1,6 @@
 # USA-House-Price-Prediction-ML-App
 This application uses machine learning techniques to predict house prices across the United States based on various property features. By analyzing historical real estate data such as living area, number of bedrooms, bathrooms, condition, location, and nearby schools, the app generates price estimates for residential properties.
 
-
 # 🏠 USA House Price Prediction ML App
 
 ## Project Objective
@@ -65,7 +64,6 @@ Used `GridSearchCV` with 5-fold cross-validation:
 - State-aware pricing with tax-based adjustments
 - Input validation and prediction display UI
 
----
 
 ## 🔧 Technologies Used
 - Python, scikit-learn, pandas, numpy
@@ -88,9 +86,6 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
---
----
-
 ## 💡 Project Insights
 - States with higher tax rates (e.g., CA, NY) required adjustments to reflect net cost of ownership.
 - School rating showed a high correlation with price even when controlling for ZIP and size.
@@ -104,9 +99,6 @@ streamlit run streamlit_app.py
 https://usa-housepricepredictions.streamlit.app/
 ---
 
----
-
-© 2025 Ayman Mohammad | MIT License
 
 
 
