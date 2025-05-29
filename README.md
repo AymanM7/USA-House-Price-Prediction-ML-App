@@ -4,9 +4,6 @@ This application uses machine learning techniques to predict house prices across
 
 # 🏠 USA House Price Prediction ML App
 
-
-# 🏠 USA House Price Prediction ML App
-
 ## Project Objective
 This project delivers a professional-grade machine learning application for predicting house prices across the United States. Designed for real estate professionals, analysts, and investors, the solution uses real-world economic data, optimized machine learning models, and geospatial APIs to deliver accurate, interpretable price predictions in 2025 market conditions. 
 
@@ -60,14 +57,6 @@ The app simplifies prediction to five impactful features while incorporating hyp
 
 ### 🔍 Hyperparameter Tuning
 Used `GridSearchCV` with 5-fold cross-validation:
-- **Random Forest**
-  - `n_estimators`: [100, 300, 500]
-  - `max_depth`: [10, 20, 30, None]
-  - `min_samples_split`: [2, 5, 10]
-  - `min_samples_leaf`: [1, 2, 4]
-  - `bootstrap`: [True, False]
-- Final model serialized with `joblib` as `model.pkl`
-
 ---
 
 ## 🖥 App Features (Streamlit)
@@ -85,7 +74,6 @@ Used `GridSearchCV` with 5-fold cross-validation:
 - Joblib (model serialization)
 - Folium (map rendering)
 
----
 
 ## 🗺️ How to Run Locally
 ```bash
@@ -100,22 +88,7 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
----
-
-## 📁 Project Structure
-```
-usa-house-price-prediction-ml-app/
-│
-├── data/                         # Cleaned datasets (optional)
-├── models/
-│   └── model.pkl                 # Final trained model
-├── streamlit_app.py              # Main app logic
-├── requirements.txt              # Dependencies
-├── README.md                     # You're reading this!
-└── assets/
-    └── screenshots/              # App UI visuals
-```
-
+--
 ---
 
 ## 💡 Project Insights
@@ -125,37 +98,11 @@ usa-house-price-prediction-ml-app/
 - The 5 selected features yielded high predictive power, validating the "minimal-input" approach.
 - SHAP analysis (in future phase) will be added to visualize feature importance for interpretability.
 
----
 
-## 🧩 Future Enhancements
-- Mortgage estimation and loan amortization tools
-- Zillow/Redfin live data integration
-- CSV upload for bulk predictions
-- Authentication & session-based saving for real estate agents
-- Feature attribution with SHAP/ELI5
-
----
 
 ## 🔗 Live Demo
-[Launch the Streamlit App](https://your-streamlit-url)
-
+https://usa-housepricepredictions.streamlit.app/
 ---
-
-## 🏷️ Tags
-#machinelearning #realestate
-
----
-
-## 👨‍💻 Developer
-**Ayman Mohammad**  
-B.S. Information Technology and Systems  
-University of Texas at Dallas  
-[GitHub: yourGitHubUsername](https://github.com/yourGitHubUsername)
-
----
-
-## ⭐ Support
-If this project was helpful, please give it a ⭐ on GitHub. Fork it, build on it, and share feedback!
 
 ---
 
