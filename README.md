@@ -1,103 +1,149 @@
 
 # 🏠 USA House Price Prediction ML App
 
-## Project Objective
-This project delivers a professional-grade machine learning application for predicting house prices across the United States. Designed for real estate professionals, analysts, and investors, the solution uses real-world economic data, optimized machine learning models, and geospatial APIs to deliver accurate, interpretable price predictions in 2025 market conditions. 
+# USA House Price Prediction ML App 🏠📈
 
-The app simplifies prediction to five impactful features while incorporating hyperparameter tuning, economic adjustments, and API-enhanced location intelligence. It is built using Python, scikit-learn, Streamlit, and OpenStreetMap's Nominatim API.
-
----
-
-## 📊 Dataset Summary
-
-- **Source**: U.S. residential property listings, augmented with school ratings, ZIP code mapping, and state tax policies.
-- **Size**: Over 100,000 housing records.
-- **Target Variable**: House sale price
-- **Key Engineered Features**:
-  - Bedrooms
-  - Bathrooms
-  - Living Area (sq ft)
-  - House Condition (1–5 scale)
-  - Nearby School Quality Rating
-  - Geolocation (via ZIP code → Lat/Long)
-  - Adjusted for state-specific 2025 tax policies
+This real-world project leverages AI/ML to predict house prices across the United States using core property features and contextual state-level data. Designed for deployment on Streamlit and built for interpretability and production readiness, this project combines model experimentation, API integration, and 2025 market insights to create a highly responsive and realistic real estate price predictor.
 
 ---
 
-## ❓ Key Business Questions & KPIs
+## 🎯 Project Objective
+To build a robust machine learning application that predicts housing prices in the U.S. using real-time geolocation data, engineered features, and economic factors like tax rates and market conditions per state.
 
-1. Can minimal, high-impact features predict house prices accurately?
-2. What effect do school ratings and property condition have on valuations?
-3. How do different U.S. states compare in predicted pricing, adjusted for 2025 tax codes?
-4. What is the accuracy tradeoff between model complexity and interpretability?
-5. Are hyperparameter-optimized models significantly more robust in generalization?
+This tool is designed for potential homebuyers, real estate analysts, and investors to make informed decisions about property valuations.
 
 ---
 
-## ⚙️ Model Development & Methodology
+## 🧠 ML Models and Training Process
+We trained and evaluated multiple regression models:
 
-### 🧹 Data Processing
-- Null values, duplicates, and inconsistent entries were removed.
-- ZIP codes were geocoded using the Nominatim API to derive latitude/longitude.
-- State-level 2025 housing tax rates were applied as price multipliers for realism.
-- School scores and condition were normalized to 0–1 scales where applicable.
-
-### 🧪 Train/Test Split
-- Stratified sampling ensured representative pricing across regions.
-- Dataset split: 80% for training, 20% for testing.
-- Cross-validation used during tuning to prevent overfitting.
-
-### 🧠 Models Evaluated
-- **Linear Regression** – Baseline for interpretability.
-- **Decision Tree Regressor** – Introduced non-linearity, fast fit.
-- **Random Forest Regressor** – Final choice due to balance of accuracy and robustness.
+- **Linear Regression**
+- **Random Forest Regressor**
+- **Decision Tree Regressor**
+- **Support Vector Regressor (SVR)**
+- **XGBoost Regressor**
 
 ### 🔍 Hyperparameter Tuning
-Used `GridSearchCV` with 5-fold cross-validation:
+- **Tool**: `GridSearchCV`
+- **Models Tuned**: Random Forest, Decision Tree
+- **Parameters Tuned**:
+  - `max_depth`
+  - `n_estimators`
+  - `min_samples_split`
+  - `min_samples_leaf`
+
+### 📊 Train-Test Split
+- 80% training / 20% testing
+- Stratified sampling was used to ensure consistency in the target distribution.
+
 ---
 
-## 🖥 App Features (Streamlit)
-- Real-time prediction based on user input (5 key features)
-- Location-aware mapping using Folium + Nominatim
-- State-aware pricing with tax-based adjustments
-- Input validation and prediction display UI
+## 📍 Feature Engineering
+We narrowed down the input features to the most impactful predictors:
+- Number of Bedrooms
+- Number of Bathrooms
+- Living Area (in sq ft)
+- House Condition Rating
+- School Quality in the Area
 
+---
 
-## 🔧 Technologies Used
-- Python, scikit-learn, pandas, numpy
-- Streamlit (UI framework)
-- Geopy + Nominatim API (geolocation)
-- Joblib (model serialization)
-- Folium (map rendering)
+## 🌐 API Integration
+We integrated the **Nominatim API (OpenStreetMap)** to:
+- Convert user-entered addresses into precise latitude/longitude coordinates.
+- Automatically fetch and display the ZIP code, enabling more location-aware predictions.
 
+---
 
-## 🗺️ How to Run Locally
+## 📈 Market-Level Adjustment (2025 Real Estate Trends)
+This model uniquely adjusts predicted prices based on:
+- **2025 State Tax Rates**
+- **Inflation and Market Forecasting**
+- **Real Estate Trends** (gathered from housing reports and regional economics)
+
+Each state has its own economic multiplier embedded in the model to reflect real-world price variation.
+
+---
+
+## 📂 File Structure
+```
+├── usa-house-price-prediction-ml-app/
+│   ├── streamlit_app.py              # Main Streamlit frontend
+│   ├── model.pkl                     # Trained ML model (Random Forest)
+│   ├── utils.py                      # Utility functions (e.g., API call, preprocessing)
+│   ├── requirements.txt             # Required Python libraries
+│   ├── README.md                    # Project documentation
+```
+
+---
+
+## 🚀 App Features
+- 🧮 Predict house prices based on core property features
+- 🗺️ Location-aware predictions using geolocation & ZIP
+- 📊 Dynamic 2025-adjusted market prices by state
+- 📉 Multiple ML models benchmarked
+- 🌐 Hosted on Streamlit Cloud for public access
+
+---
+
+## 🧪 KPIs Tracked
+- Time to generate prediction (< 1 second)
+- MAE / RMSE during testing (reported in console logs)
+- Latency for API address resolution
+- Input validation coverage
+- Regional accuracy against real market trends
+
+---
+
+## 💻 Installation & Usage
+### Clone the Repository
 ```bash
-# Clone the repo
-git clone https://github.com/<your-username>/usa-house-price-prediction-ml-app.git
+git clone https://github.com/aymanmohammaddev/usa-house-price-prediction-ml-app.git
 cd usa-house-price-prediction-ml-app
+```
 
-# Install required libraries
+### Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-# Run the app
+### Launch Locally
+```bash
 streamlit run streamlit_app.py
 ```
 
-## 💡 Project Insights
-- States with higher tax rates (e.g., CA, NY) required adjustments to reflect net cost of ownership.
-- School rating showed a high correlation with price even when controlling for ZIP and size.
-- Random Forest model delivered reliable accuracy without overfitting.
-- The 5 selected features yielded high predictive power, validating the "minimal-input" approach.
-- SHAP analysis (in future phase) will be added to visualize feature importance for interpretability.
+### Deploy to Streamlit Cloud
+- Push all code, including `model.pkl` and `requirements.txt`
+- Set `streamlit_app.py` as the entry point on the Streamlit dashboard
 
-
-
-## 🔗 Live Demo
-https://usa-housepricepredictions.streamlit.app/
 ---
 
+## 🧠 Insights & Strategy
+This project reflects months of research and iteration to simulate a realistic, localized housing price model. The use of 2025 tax and trend data ensures predictions stay anchored in future conditions. The integration with real-world APIs and inclusion of model tuning adds a strong engineering foundation for expansion and production-level reliability.
 
+---
 
+## 🤖 Technologies Used
+- Python
+- Streamlit
+- Scikit-learn
+- Pandas, NumPy
+- Seaborn, Matplotlib
+- Joblib
+- Geopy (Nominatim API)
+- GridSearchCV
+
+---
+
+## 📌 Tags
+#machinelearning #realestate
+
+---
+
+## 🔗 Contribute / Contact
+Pull requests and suggestions are welcome! For questions or collaborations:
+📫 aymanmohammad@utdallas.edu
+
+ 
 
 
