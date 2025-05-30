@@ -62,6 +62,12 @@ This model uniquely adjusts predicted prices based on:
 Each state has its own economic multiplier embedded in the model to reflect real-world price variation.
 
 ---
+## 📂 Live Demo
+
+- Link to View Complete Tableau Dashboard : <a href="https://usa-housepricepredictions.streamlit.app/" target="_blank">View Full ML App Here</a>
+
+
+
 
 ## 📂 File Structure
 ```
