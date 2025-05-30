@@ -36,7 +36,7 @@ This tool is designed for potential homebuyers, real estate analysts, and invest
 ---
 
 ## 📍 Feature Engineering
-We narrowed down the input features to the most impactful predictors:
+Narrowed down the input features to the most impactful predictors:
 - Number of Bedrooms
 - Number of Bathrooms
 - Living Area (in sq ft)
