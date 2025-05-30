@@ -88,8 +88,7 @@ Each state has its own economic multiplier embedded in the model to reflect real
 
 ## 🧪 KPIs Tracked
 - Time to generate prediction (< 1 second)
-- MAE / RMSE during testing (reported in console logs)
-- Latency for API address resolution
+-  Latency for API address resolution
 - Input validation coverage
 - Regional accuracy against real market trends
 
@@ -112,9 +111,6 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
-### Deploy to Streamlit Cloud
-- Push all code, including `model.pkl` and `requirements.txt`
-- Set `streamlit_app.py` as the entry point on the Streamlit dashboard
 
 ---
 
