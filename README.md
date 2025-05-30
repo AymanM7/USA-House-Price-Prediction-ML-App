@@ -1,7 +1,7 @@
 # USA House Price Prediction ML App 🏠📈
 
 
-This real-world project leverages AI/ML to predict house prices across the United States using core property features and contextual state-level data. Designed for deployment on Streamlit and built for interpretability and production readiness, this project combines model experimentation, API integration, and 2025 market insights to create a highly responsive and realistic real estate price predictor.
+This real-world project leverages AI/ML to predict house prices across the United States using core property features and contextual state-level data. Designed for deployment on Streamlit and built for testing and production readiness, this project combines model experimentation, API integration, and 2025 market insights to create a highly responsive and realistic real estate price predictor.Test out different house prices and enjoy the model.
 
 ---
 
