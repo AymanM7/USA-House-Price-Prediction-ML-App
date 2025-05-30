@@ -13,12 +13,11 @@ This tool is designed for potential homebuyers, real estate analysts, and invest
 ---
 
 ## 🧠 ML Models and Training Process
-We trained and evaluated multiple regression models:
+ Trained and evaluated multiple regression models:
 
 - **Linear Regression**
 - **Random Forest Regressor**
 - **Decision Tree Regressor**
-- **Support Vector Regressor (SVR)**
 - **XGBoost Regressor**
 
 ### 🔍 Hyperparameter Tuning
@@ -47,7 +46,7 @@ We narrowed down the input features to the most impactful predictors:
 ---
 
 ## 🌐 API Integration
-We integrated the **Nominatim API (OpenStreetMap)** to:
+ Integrated the **Nominatim API (OpenStreetMap)** to:
 - Convert user-entered addresses into precise latitude/longitude coordinates.
 - Automatically fetch and display the ZIP code, enabling more location-aware predictions.
 
@@ -84,7 +83,6 @@ Each state has its own economic multiplier embedded in the model to reflect real
 - 🗺️ Location-aware predictions using geolocation & ZIP
 - 📊 Dynamic 2025-adjusted market prices by state
 - 📉 Multiple ML models benchmarked
-- 🌐 Hosted on Streamlit Cloud for public access
 
 ---
 
