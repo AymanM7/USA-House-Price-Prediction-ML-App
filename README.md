@@ -64,9 +64,7 @@ Each state has its own economic multiplier embedded in the model to reflect real
 ---
 ## 📂 Live Demo
 
-- Link to View Complete Tableau Dashboard : <a href="https://usa-housepricepredictions.streamlit.app/" target="_blank">View Full ML App Here</a>
-
-
+- Link to View Complete USA House Price Predictor App : <a href="https://usa-housepricepredictions.streamlit.app/" target="_blank">View USA House Price ML App Here</a>
 
 
 ## 📂 File Structure
