@@ -121,7 +121,7 @@ This project reflects months of research and iteration to simulate a realistic, 
 
 ---
 
-## 🤖 Technologies Used
+## 🤖 Technologies and Libraries Used
 - Python
 - Streamlit
 - Scikit-learn
@@ -132,15 +132,6 @@ This project reflects months of research and iteration to simulate a realistic, 
 - GridSearchCV
 
 ---
-
-## 📌 Tags
-#machinelearning #realestate
-
----
-
-## 🔗 Contribute / Contact
-Pull requests and suggestions are welcome! For questions or collaborations:
-📫 aymanmohammad@utdallas.edu
 
  
 
