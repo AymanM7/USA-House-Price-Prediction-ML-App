@@ -30,7 +30,6 @@ This tool is designed for potential homebuyers, real estate analysts, and invest
 - Stratified sampling was used to ensure consistency in the target distribution.
 
 ---
-
 ## 📍 Feature Engineering
 Narrowed down the input features to the most impactful predictors:
 - Number of Bedrooms
@@ -51,10 +50,10 @@ Narrowed down the input features to the most impactful predictors:
 ## 📈 Market-Level Adjustment (2025 Real Estate Trends)
 This model uniquely adjusts predicted prices based on:
 - **2025 State Tax Rates**
-- **Inflation and Market Forecasting**
+- **Inflation and Market Forecasting Based on 2025**
 - **Real Estate Trends** (gathered from housing reports and regional economics)
 
-Each state has its own economic multiplier embedded in the model to reflect real-world price variation.
+Each state has its own economic multiplier embedded in the model to reflect real-world price variation with current market conitions.
 
 ---
 ## 📂 Live Demo
