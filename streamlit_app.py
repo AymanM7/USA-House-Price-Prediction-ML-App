@@ -2,7 +2,11 @@ import streamlit as st
 import joblib
 import numpy as np
 import pandas as pd
-
+from streamlit_folium import folium_static
+import folium
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderQuotaExceeded
+import re
 
 # Define colors and styles at the top
 bg_gradient = "linear-gradient(-45deg, #1a1a1a, #2e2e2e, #3d3d3d, #4a4a4a)"  # Dark gradient to maintain black theme
@@ -257,11 +261,144 @@ with st.container():
     zip_code = st.text_input("📍 ZIP Code", value="12345", key="zip")
     st.markdown('</div>', unsafe_allow_html=True)
 
-=
+
+# ------------------- Location-Based Feature -----------------------
+st.subheader("🗺 Location Context")
+try:
+    # Validate ZIP code format (5 digits) and restrict to USA
+    if not re.match(r"^\d{5}$", zip_code):
+        raise ValueError("ZIP code must be a 5-digit number")
+    # Check if ZIP is within valid US range (e.g., 00501-99950, excluding non-US)
+    zip_int = int(zip_code)
+    if zip_int < 501 or zip_int > 99950 or zip_int in [340, 962, 963, 964, 965, 966, 967, 968, 969]:  # Exclude non-US ZIP ranges
+        raise ValueError("ZIP code must be a valid US ZIP code")
+
+
+    # Check if ZIP code changed or no cached data
+    if zip_code != st.session_state.last_zip or st.session_state.last_location_data is None:
+        location_data = geocode_zip(zip_code)
+        if location_data:
+            lat, lon = location_data
+            state = reverse_geocode(lat, lon)
+            st.session_state.last_location_data = (lat, lon, state)
+            st.session_state.last_zip = zip_code
+        else:
+            raise ValueError("Invalid ZIP code or geocoding failed")
+    else:
+        lat, lon, state = st.session_state.last_location_data
+
 
     
+    #State-specific price adjustments
+    state_adjustments = {    
+   'Alabama': (1.03, "+3% (Moderate growth, low property taxes at 0.38%)"),  # Low taxes, affordable market[](https://www.propertyshark.com/info/property-taxes-by-state/)
+    'Alaska': (1.02, "+2% (Stable, remote market with high costs)"),  # Stable but high living costs
+    'Arizona': (0.98, "-2% (Oversupply, high risk of price decline)"),  # High risk of price drops[](https://www.cotality.com/insights/articles/us-home-price-insights-march-2025)
+    'Arkansas': (1.03, "+3% (Moderate growth, low-cost Midwest)"),  # Affordable, stable growth
+    'California': (1.03, "+3% (High demand, affordability issues, 7% mortgage rates)"),  # High costs, locked-in homeowners[](https://lao.ca.gov/LAOEconTax/Article/Detail/793)
+    'Colorado': (1.03, "+3% (Stable, tech-driven, moderating prices)"),  # Cooling after boom[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'Connecticut': (1.06, "+6% (Northeast strength, high property taxes at 1.81%)"),  # Strong market, high taxes[](https://taxfoundation.org/data/all/state/property-taxes-by-state-county/)
+    'Delaware': (1.05, "+5% (Moderate growth, urban proximity)"),  # Steady demand
+    'Florida': (0.99, "-1% (Oversupply in some markets, high insurance costs)"),  # Risk of price decline[](https://www.cotality.com/insights/articles/us-home-price-insights-march-2025)
+    'Georgia': (1.05, "+5% (Sunbelt growth, strong job market)"),  # Hot market, population growth[](https://raleighrealty.com/blog/least-and-most-affordable-states)
+    'Hawaii': (0.97, "-3% (Price decline, high home values at $843,723)"),  # Declining prices, high taxes[](https://www.fool.com/money/research/average-house-price-state/)
+    'Idaho': (1.02, "+2% (Cooling after boom, high prices at $466,435)"),  # Post-boom correction[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'Illinois': (1.04, "+4% (Moderate growth, high property taxes at 2.11%)"),  # Urban-driven, high taxes[](https://taxfoundation.org/data/all/state/property-taxes-by-state-county/)
+    'Indiana': (1.05, "+5% (Midwest growth, affordable homes)"),  # Strong appreciation potential[](https://realwealth.com/learn/housing-market-predictions/)
+    'Iowa': (1.03, "+3% (Stable, low-cost market)"),  # Steady, affordable
+    'Kansas': (1.03, "+3% (Stable, agricultural market)"),  # Moderate growth
+    'Kentucky': (1.04, "+4% (Moderate growth, affordable housing)"),  # Stable, low-cost
+    'Louisiana': (1.02, "+2% (Slower growth, hurricane risks)"),  # Slower market, natural disaster impacts
+    'Maine': (1.06, "+6% (Northeast strength, high demand)"),  # Strong regional market
+    'Maryland': (1.05, "+5% (High home values at $634,548, urban proximity)"),  # Expensive but stable[](https://www.fool.com/money/research/average-house-price-state/)
+    'Massachusetts': (1.06, "+6% (High home values at $247,917, strong market)"),  # Costly, low affordability[](https://www.fool.com/money/research/average-house-price-state/)
+    'Michigan': (1.05, "+5% (Affordable homes at $337,608, Detroit growth)"),  # Strong Midwest market[](https://www.fool.com/money/research/average-house-price-state/)
+    'Minnesota': (1.04, "+4% (Stable, good income-to-home-value ratio)"),  # Balanced market[](https://www.fool.com/money/research/average-house-price-state/)
+    'Mississippi': (1.02, "+2% (Slower growth, low-cost housing)"),  # Affordable, slow market
+    'Missouri': (1.03, "+3% (Moderate growth, affordable Midwest)"),  # Stable, low-cost
+    'Montana': (1.02, "+2% (Cooling after boom, rural market)"),  # Post-boom stabilization
+    'Nebraska': (1.04, "+4% (Stable, strong ROI potential)"),  # Affordable, investment-friendly[](https://raleighrealty.com/blog/least-and-most-affordable-states)
+    'Nevada': (1.05, "+5% (Sunbelt, Vegas-driven growth)"),  # Strong demand, urban centers
+    'New Hampshire': (1.06, "+6% (Northeast strength, high property taxes)"),  # Strong market, high taxes[](https://taxfoundation.org/data/all/state/property-taxes-by-state-county/)
+    'New Jersey': (1.07, "+7% (High demand, highest property taxes at 2.23%)"),  # Expensive, urban-driven[](https://www.propertyshark.com/info/property-taxes-by-state/)
+    'New Mexico': (1.02, "+2% (Moderate growth, high risk of price decline)"),  # Cooling market[](https://www.cotality.com/insights/articles/us-home-price-insights-february-2025)
+    'New York': (1.05, "+5% (Strong urban markets, high taxes)"),  # Variable but strong[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'North Carolina': (1.06, "+6% (Hot market, Raleigh growth, strong ROI)"),  # High demand, population growth[](https://raleighrealty.com/blog/least-and-most-affordable-states)
+    'North Dakota': (1.02, "+2% (Slower growth, stable economy)"),  # Slow but steady
+    'Ohio': (1.05, "+5% (Midwest growth, affordable markets)"),  # Strong appreciation potential[](https://realwealth.com/learn/housing-market-predictions/)
+    'Oklahoma': (1.03, "+3% (Moderate growth, low-cost housing)"),  # Affordable, stable
+    'Oregon': (1.02, "+2% (Cooling, high prices at $502,215)"),  # Affordability constraints[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'Pennsylvania': (1.05, "+5% (Moderate urban growth, stable market)"),  # Steady demand
+    'Rhode Island': (1.08, "+8% (High price appreciation, small inventory)"),  # Strong Northeast market
+    'South Carolina': (1.06, "+6% (Sunbelt, Charleston-driven growth)"),  # Hot market, coastal demand
+    'South Dakota': (1.03, "+3% (Stable, rural market)"),  # Moderate growth
+    'Tennessee': (1.05, "+5% (Sunbelt, Nashville growth, strong ROI)"),  # High demand, investment-friendly[](https://realwealth.com/learn/housing-market-predictions/)
+    'Texas': (0.99, "+1% (Oversupply, price fluctations expected)"),  # High inventory, price drops[](https://www.newsweek.com/texas-faces-major-housing-market-correction-prices-drop-across-state-2070190)
+    'Utah': (1.02, "+2% (Cooling after boom, high prices at $544,868)"),  # Post-boom correction[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'Vermont': (1.08, "+8% (High price appreciation, low inventory)"),  # Strong Northeast market
+    'Virginia': (1.05, "+5% (Stable, urban proximity, strong job market)"),  # Steady demand
+    'Washington': (1.03, "+3% (Stable, tech-driven, high prices at $595,723)"),  # Cooling, high costs[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+    'West Virginia': (1.07, "+7% (High appreciation, lowest prices at $146,578)"),  # Affordable, high growth[](https://raleighrealty.com/blog/least-and-most-affordable-states)
+    'Wisconsin': (1.05, "+5% (Midwest growth, stable market)"),  # Strong, affordable
+    'Wyoming': (1.02, "+2% (Slower growth, rural market)"),  # Stable, low demand
+    'District of Columbia': (0.97, "-3% (Price decline, high costs at $701,895)"),  # Declining prices, low homeownership[](https://worldpopulationreview.com/state-rankings/median-home-price-by-state)
+}
 
 
+    if state in state_adjustments:
+        location_multiplier, adjustment_text = state_adjustments[state]
+    else:
+        location_multiplier = 1.03  # Default for unknown states
+        adjustment_text = "+3% (General market)"
+   
+    # Render map
+    m = folium.Map(location=[lat, lon], zoom_start=10)
+    folium.Marker([lat, lon], popup=f"ZIP: {zip_code}", tooltip="Estimated Location").add_to(m)
+    folium_static(m, width=700, height=300)
+   
+    # Display adjustment
+    st.write(f"Location adjustment for ZIP {zip_code}: {adjustment_text}")
+   
+    # OpenStreetMap attribution
+    st.markdown("Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors", unsafe_allow_html=True)
+
+
+except ValueError as ve:
+    # Handle invalid ZIP format or non-US ZIP codes
+    lat, lon = 39.8283, -98.5795
+    location_multiplier = 1.0
+    st.error(f"Error: {str(ve)}. Using default US center location.")
+    m = folium.Map(location=[lat, lon], zoom_start=10)
+    folium.Marker([lat, lon], popup="Default Location", tooltip="US Center").add_to(m)
+    folium_static(m, width=700, height=300)
+    st.markdown("Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors", unsafe_allow_html=True)
+except GeocoderTimedOut:
+    # Handle API timeout
+    lat, lon = 39.8283, -98.5795
+    location_multiplier = 1.0
+    st.error("Geocoding timed out. Please try again later. Using default US center location.")
+    m = folium.Map(location=[lat, lon], zoom_start=10)
+    folium.Marker([lat, lon], popup="Default Location", tooltip="US Center").add_to(m)
+    folium_static(m, width=700, height=300)
+    st.markdown("Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors", unsafe_allow_html=True)
+except GeocoderQuotaExceeded:
+    # Handle API rate limit
+    lat, lon = 39.8283, -98.5795
+    location_multiplier = 1.0
+    st.error("API rate limit exceeded. Please wait a moment and try again. Using default US center location.")
+    m = folium.Map(location=[lat, lon], zoom_start=10)
+    folium.Marker([lat, lon], popup="Default Location", tooltip="US Center").add_to(m)
+    folium_static(m, width=700, height=300)
+    st.markdown("Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors", unsafe_allow_html=True)
+except Exception as e:
+    # Handle other errors
+    lat, lon = 39.8283, -98.5795
+    location_multiplier = 1.0
+    st.error(f"Map rendering or geocoding failed: {str(e)}. Using default US center location.")
+    m = folium.Map(location=[lat, lon], zoom_start=10)
+    folium.Marker([lat, lon], popup="Default Location", tooltip="US Center").add_to(m)
+    folium_static(m, width=700, height=300)
+    st.markdown("Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors", unsafe_allow_html=True)
 
 
 # ------------------- Predict Button -----------------------
