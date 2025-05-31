@@ -23,11 +23,7 @@ This tool is designed for potential homebuyers, real estate analysts, and invest
 ### 🔍 Hyperparameter Tuning
 - **Tool**: `GridSearchCV`
 - **Models Tuned**: Random Forest, Decision Tree
-- **Parameters Tuned**:
-  - `max_depth`
-  - `n_estimators`
-  - `min_samples_split`
-  - `min_samples_leaf`
+
 
 ### 📊 Train-Test Split
 - 80% training / 20% testing
