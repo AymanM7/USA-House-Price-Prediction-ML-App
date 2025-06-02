@@ -65,8 +65,7 @@ Each state has its own economic multiplier embedded in the model to reflect real
 ```
 ├── usa-house-price-prediction-ml-app/
 │   ├── streamlit_app.py              # Main Streamlit frontend
-│   ├── model.pkl                     # Trained ML model (Random Forest)
-│   ├── utils.py                      # Utility functions (e.g., API call, preprocessing)
+│   ├── model.pkl                     # Trained ML model 
 │   ├── requirements.txt             # Required Python libraries
 │   ├── README.md                    # Project documentation
 ```
