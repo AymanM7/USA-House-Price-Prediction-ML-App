@@ -6,7 +6,7 @@ This real-world project leverages AI/ML to predict house prices across the Unite
 ---
 
 ## 🎯 Project Objective
-To build a robust machine learning application that predicts housing prices in the U.S. using real-time geolocation data, engineered features, and economic factors like tax rates and market conditions per state.
+To build a  machine learning application that predicts housing prices in the U.S. using real-time geolocation data, engineered features, and economic factors like tax rates and market conditions per state.
 
 This tool is designed for potential homebuyers, real estate analysts, and investors to make informed decisions about property valuations.
 
