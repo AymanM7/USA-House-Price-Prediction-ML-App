@@ -108,6 +108,19 @@ streamlit run streamlit_app.py
 
 ---
 
+## 🧱 Challenges Faced
+Building a reliable and location-aware house price predictor came with several challenges:
+
+📍 Geolocation Inaccuracy
+Integrating the Nominatim API introduced occasional inaccuracies or delays in address-to-coordinate conversions, especially for ambiguous or incomplete entries.
+
+⚖️ Balancing Model Performance vs. Interpretability
+While complex models like XGBoost offered better performance, they sacrificed transparency. A tradeoff had to be made to retain explainability.
+
+📈 Incorporating 2025 Market Trends
+Estimating future real estate behavior required a blend of  research in historical analysis, projections, and economic assumptions. Crafting accurate state-level multipliers was both time-intensive and sensitive to future uncertainties.
+
+
 ## 🧠 Insights & Strategy
 This project reflects months of research and iteration to simulate a realistic, localized housing price model. The use of 2025 tax and trend data ensures predictions stay anchored in future conditions. The integration with real-world APIs and inclusion of model tuning adds a strong engineering foundation for expansion and production-level reliability.
 
